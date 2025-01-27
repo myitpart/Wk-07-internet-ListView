@@ -1,6 +1,8 @@
 # book_flutter
 
 A new Flutter project for Flutter MB app Dev
+- List view and Internet ext book Flutter
+- master-detail view
 
 ## Getting Started
 
