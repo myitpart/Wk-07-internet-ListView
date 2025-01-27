@@ -1,12 +1,13 @@
-// fetch data from a server
+//
+
 import 'package:flutter/material.dart';
 // import 'dart:async';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'services/http_service.dart';
-// import 'models/product.dart';
+import 'models/product.dart';
 
-// Future<Product> fetchData() async {
+// Future<Product> fetchRecord() async {
 //   // not be used
 //   final response = await http
 //       .get(Uri.parse('https://myitpart.github.io/api/json/1.json'), headers: {
@@ -23,6 +24,24 @@ import 'services/http_service.dart';
 //   }
 // }
 
+// fetch 1 record
+Future<Product> fetchRecord({required String strUrl}) async {
+  debugPrint('url: $strUrl');
+  final response = await http.get(Uri.parse(strUrl), headers: {
+    "Accept": "application/json",
+    "content-type": "application/json",
+  });
+
+  if (response.statusCode == 200) {
+    debugPrint('${response.body.toString()}');
+    // debugPrint('${jsonDecode(response.body)}');
+    return Product.fromJson(jsonDecode(response.body));
+  } else {
+    debugPrint('failed loading data!');
+    throw Exception('Failed to load data!');
+  }
+}
+
 class DetailPage extends StatefulWidget {
   final int productId;
 
@@ -33,13 +52,10 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  // static const String baseUrl =
-  //     'https://myitpart.github.io/api/json/'; // API json
   static const String baseUrl = 'https://itpart.net/mobile/api/'; // API json
-  String baseImgUrl =
-      'https://myitpart.github.io/api/images/'; // base Image URL
+  String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
 
-  HttpService httpService = HttpService();
+  // HttpService httpService = HttpService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +70,11 @@ class _DetailPageState extends State<DetailPage> {
           child: Column(
             children: [
               FutureBuilder(
-                future: httpService.fetchRecord(
-                    // strUrl: '$baseUrl${widget.productId}.json'), //fetchData(),
-                    // strUrl:  'https://itpart.net/mobile/api/product1.php'), //fetchData(),
-                    strUrl:
-                        '$baseUrl/product${widget.productId}.php'), //fetchData(),
+                future: fetchRecord(
+                    strUrl: '$baseUrl/product${widget.productId}.php'),
+                // future: httpService.fetchRecord(
+                // strUrl:  'https://itpart.net/mobile/api/product1.php'), //fetchData(),
+
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // until data is fetched, show loader

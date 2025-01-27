@@ -1,3 +1,4 @@
+import 'package:book_flutter/detail_page.dart';
 import 'package:book_flutter/my_listpage.dart';
 
 // import 'detail_page.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       // home: MyFutureBuilderPage(),
       // home: HttpBasic(),
       // home: DetailPage(),
-      // home: DetailPage(id: 0),
+      // home: DetailPage(productId: 2),
       home: const MyListPage(),
     );
   }

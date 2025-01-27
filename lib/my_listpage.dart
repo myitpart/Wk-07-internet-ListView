@@ -16,11 +16,8 @@ class _MyListPageState extends State<MyListPage> {
   HttpService httpService = HttpService();
 
   static const String baseUrl =
-      // 'https://myitpart.github.io/api/json/products.json'; // API json
       'https://itpart.net/mobile/api/products.php'; // API json
-  String baseImgUrl =
-      // 'https://myitpart.github.io/api/images/'; // base Image URL
-      'https://itpart.net/mobile/images/'; // base Image URL
+  String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +52,6 @@ class _MyListPageState extends State<MyListPage> {
   ListView _buildListView(List<Product> products) {
     debugPrint('total products: ${products.length}');
     return ListView.separated(
-      // shrinkWrap: true,
-      // padding: EdgeInsets.all(8),
-      // itemCount: products.length,
       itemCount: products.length,
       itemBuilder: (context, index) => ListTile(
         leading: Image.network(
