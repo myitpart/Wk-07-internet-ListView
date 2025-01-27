@@ -33,8 +33,23 @@ class _MyListPageState extends State<MyListPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasData) {
-              return _buildListView(snapshot.data!);
+              // return _buildListView(snapshot.data!);
               // return Text('data: ${snapshot.data![0].title} ');
+              List<Product>? products = snapshot.data;
+
+              return ListView.separated(
+                itemCount: products!.length,
+                itemBuilder: (context, index) => ListTile(
+                  leading: Image.network(
+                    '$baseImgUrl/${products[index].imageUrl}',
+                    width: 86,
+                  ),
+                  title: Text(products[index].title,
+                      style: TextStyle(fontSize: 18)),
+                  subtitle: Text(products[index].description),
+                ),
+                separatorBuilder: (context, int index) => const Divider(),
+              );
             } else {
               return const Text('No data found.');
             }
@@ -75,3 +90,14 @@ class _MyListPageState extends State<MyListPage> {
     );
   }
 }
+
+
+/*
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          productId: products[index].id,
+                        ),
+                      )),
+*/
