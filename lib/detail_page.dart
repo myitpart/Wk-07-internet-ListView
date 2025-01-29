@@ -27,10 +27,13 @@ import 'models/product.dart';
 // fetch 1 record
 Future<Product> fetchRecord({required String strUrl}) async {
   debugPrint('url: $strUrl');
-  final response = await http.get(Uri.parse(strUrl), headers: {
-    "Accept": "application/json",
-    "content-type": "application/json",
-  });
+  final response = await http.get(
+    Uri.parse(strUrl),
+    headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+    },
+  );
 
   if (response.statusCode == 200) {
     debugPrint('${response.body.toString()}');

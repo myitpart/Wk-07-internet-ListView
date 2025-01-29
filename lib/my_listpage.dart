@@ -1,5 +1,6 @@
 // ListView calls httpService ext http Project/ http use servvice listpge
 
+import 'package:book_flutter/config/constants.dart';
 import 'package:flutter/material.dart';
 import 'detail_page.dart';
 import 'models/product.dart';
@@ -15,12 +16,16 @@ class MyListPage extends StatefulWidget {
 class _MyListPageState extends State<MyListPage> {
   HttpService httpService = HttpService();
 
-  static const String baseUrl =
-      'https://itpart.net/mobile/api/products.php'; // API json
-  String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
+  // static const String baseUrl =
+  //     'https://itpart.net/mobile/api/products.php'; // API json
+  // String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
+
+  final baseUrl = "${Constants.baseUrl}products.php";
+  final baseImgUrl = Constants.baseImgUrl;
 
   @override
   Widget build(BuildContext context) {
+    // debugPrint("myapp: $baseUrl & $baseImgUrl");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amberAccent,
@@ -35,8 +40,13 @@ class _MyListPageState extends State<MyListPage> {
             } else if (snapshot.hasData) {
               // return _buildListView(snapshot.data!);
               // return Text('data: ${snapshot.data![0].title} ');
-              List<Product>? products = snapshot.data;
+              // return ListView.builder(
+              //     itemCount: snapshot.data!.length,
+              //     itemBuilder: (context, index) => Text(
+              //           snapshot.data![index].title,
+              //         ));
 
+              List<Product>? products = snapshot.data;
               return ListView.separated(
                 itemCount: products!.length,
                 itemBuilder: (context, index) => ListTile(
