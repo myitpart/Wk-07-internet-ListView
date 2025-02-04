@@ -1,6 +1,5 @@
-// ListView calls httpService ext http Project/ http use servvice listpge
+// ListView
 
-import 'package:book_flutter/config/constants.dart';
 import 'package:flutter/material.dart';
 import 'detail_page.dart';
 import 'models/product.dart';
@@ -16,12 +15,8 @@ class MyListPage extends StatefulWidget {
 class _MyListPageState extends State<MyListPage> {
   HttpService httpService = HttpService();
 
-  // static const String baseUrl =
-  //     'https://itpart.net/mobile/api/products.php'; // API json
-  // String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
-
-  final baseUrl = "${Constants.baseUrl}products.php";
-  final baseImgUrl = Constants.baseImgUrl;
+  String baseUrl = 'https://itpart.net/mobile/api/'; // API json
+  String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +33,6 @@ class _MyListPageState extends State<MyListPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasData) {
-              // return _buildListView(snapshot.data!);
-              // return Text('data: ${snapshot.data![0].title} ');
-              // return ListView.builder(
-              //     itemCount: snapshot.data!.length,
-              //     itemBuilder: (context, index) => Text(
-              //           snapshot.data![index].title,
-              //         ));
-
               List<Product>? products = snapshot.data;
               return ListView.separated(
                 itemCount: products!.length,
@@ -57,6 +44,13 @@ class _MyListPageState extends State<MyListPage> {
                   title: Text(products[index].title,
                       style: TextStyle(fontSize: 18)),
                   subtitle: Text(products[index].description),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          productId: products[index].id,
+                        ),
+                      )),
                 ),
                 separatorBuilder: (context, int index) => const Divider(),
               );
@@ -68,46 +62,4 @@ class _MyListPageState extends State<MyListPage> {
       ),
     );
   }
-
-  // test before ListView (keep it)
-  // Text _buildListView_(List<Product> products) {
-  //   return Text('title: ${products[0].title.toString()} \n ');
-  // }
-
-  ListView _buildListView(List<Product> products) {
-    debugPrint('total products: ${products.length}');
-    return ListView.separated(
-      itemCount: products.length,
-      itemBuilder: (context, index) => ListTile(
-        leading: Image.network(
-          '$baseImgUrl/${products[index].imageUrl}',
-          width: 86,
-        ),
-        title: Text(
-            // products[index],
-            products[index].title,
-            style: TextStyle(fontSize: 18)),
-        subtitle: Text(products[index].description),
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPage(
-                productId: products[index].id,
-              ),
-            )),
-      ),
-      separatorBuilder: (context, int index) => const Divider(),
-    );
-  }
 }
-
-
-/*
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailPage(
-                          productId: products[index].id,
-                        ),
-                      )),
-*/

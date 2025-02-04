@@ -1,0 +1,128 @@
+// ListView calls httpService ext http Project/ http use servvice listpge
+// refactored code
+
+import 'package:book_flutter/config/constants.dart';
+import 'package:book_flutter/widgets/item_product_list5.dart';
+import 'package:flutter/material.dart';
+import 'detail_page.dart';
+import 'models/product.dart';
+import 'services/http_service.dart';
+
+class MyListPage extends StatefulWidget {
+  const MyListPage({super.key});
+
+  @override
+  State<MyListPage> createState() => _MyListPageState();
+}
+
+class _MyListPageState extends State<MyListPage> {
+  HttpService httpService = HttpService();
+
+  // static const String baseUrl =
+  //     'https://itpart.net/mobile/api/products.php'; // API json
+  // String baseImgUrl = 'https://itpart.net/mobile/images/'; // base Image URL
+
+  final baseUrl = "${Constants.baseUrl}products.php";
+  final baseImgUrl = Constants.baseImgUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    // debugPrint("myapp: $baseUrl & $baseImgUrl");
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amberAccent,
+        title: const Text('My App'),
+      ),
+      body: Center(
+        child: FutureBuilder(
+          future: httpService.fetchData(strUrl: baseUrl),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              // return _buildListView(snapshot.data!);
+              // return Text('data: ${snapshot.data![0].title} ');
+              // return ListView.builder(
+              //     itemCount: snapshot.data!.length,
+              //     itemBuilder: (context, index) => Text(
+              //           snapshot.data![index].title,
+              //         ));
+
+              List<Product>? products = snapshot.data;
+              // return ListView.builder(
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return ItemProductList5(item: products![index]);
+              //   },
+              // );
+
+              return ListView.separated(
+                itemCount: products!.length,
+                itemBuilder: (context, index) => ListTile(
+                  leading: Image.network(
+                    '$baseImgUrl/${products[index].imageUrl}',
+                    width: 86,
+                  ),
+                  title: Text(products[index].title,
+                      style: TextStyle(fontSize: 18)),
+                  subtitle: Text(products[index].description),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          productId: products[index].id,
+                        ),
+                      )),
+                ),
+                separatorBuilder: (context, int index) => const Divider(),
+              );
+            } else {
+              return const Text('No data found.');
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  // test before ListView (keep it)
+  // Text _buildListView_(List<Product> products) {
+  //   return Text('title: ${products[0].title.toString()} \n ');
+  // }
+
+  ListView _buildListView(List<Product> products) {
+    debugPrint('total products: ${products.length}');
+    return ListView.separated(
+      itemCount: products.length,
+      itemBuilder: (context, index) => ListTile(
+        leading: Image.network(
+          '$baseImgUrl/${products[index].imageUrl}',
+          width: 86,
+        ),
+        title: Text(
+            // products[index],
+            products[index].title,
+            style: TextStyle(fontSize: 18)),
+        subtitle: Text(products[index].description),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailPage(
+                productId: products[index].id,
+              ),
+            )),
+      ),
+      separatorBuilder: (context, int index) => const Divider(),
+    );
+  }
+}
+
+
+/*
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          productId: products[index].id,
+                        ),
+                      )),
+*/
